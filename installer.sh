@@ -1,12 +1,29 @@
 #!/bin/bash
 CONFIG="/boot/config.txt"
-if grep -Fq "arm_freq" $CONFIG
+REVCODE=$(sudo cat /proc/cpuinfo | grep 'Revision' | awk '{print $3}' | sed 's/^ *//g' | sed 's/ *$//g')
+if [ "$REVCODE" = "90092" ] || [ "$REVCODE" = "90093" ] || [ "$REVCODE" = "0x9000C1" ];
 then
+    echo "Raspberry Pi Zero"
+    if grep -Fq "arm_freq" $CONFIG
+    then
 	echo "Modifying arm_freq"
 	sed -i "/arm_freq/c\arm_freq=1100" $CONFIG
-else
+	else
 	echo "arm_freq not defined. Creating definition"
 	echo "arm_freq=1100" >> $CONFIG
+    fi
+fi
+if [ "$REVCODE" = "a02082" ] || [ "$REVCODE" = "a22082" ];
+then
+    echo "Raspberry Pi 3"
+    if grep -Fq "arm_freq" $CONFIG
+    then
+	echo "Modifying arm_freq"
+	sed -i "/arm_freq/c\arm_freq=1300" $CONFIG
+    else
+	echo "arm_freq not defined. Creating definition"
+	echo "arm_freq=1300" >> $CONFIG
+    fi
 fi
 if grep -Fq "gpu_freq" $CONFIG
 then
@@ -73,7 +90,7 @@ then
 	echo "CPU Turbo already enabled"
 else
 	echo "Force Turbo on CPU?"
-	echo "THIS VOIDS THE WARRANTY on your $10 investment"
+	echo "THIS VOIDS THE WARRANTY on your $10-35 investment."
 	echo "MUST have a heatsink for this one!"
 	echo -n "set 'force_turbo=1'? (y/n)? "
 	read answer
