@@ -8,7 +8,7 @@ then
     then
 	echo "Modifying arm_freq"
 	sed -i "/arm_freq/c\arm_freq=1100" $CONFIG
-	else
+    else
 	echo "arm_freq not defined. Creating definition"
 	echo "arm_freq=1100" >> $CONFIG
     fi
