@@ -69,11 +69,11 @@ if grep -Fq "over_voltage" $CONFIG
 then
 	echo "Modifying over_voltage amd sdram_over_voltage"
 	sed -i "/over_voltage/d" $CONFIG
-	echo "over_voltage=3" >> $CONFIG
+	echo "over_voltage=5" >> $CONFIG
 	echo "sdram_over_voltage=2" >> $CONFIG
 else
 	echo "over_voltage not defined. Creating definition"
-	echo "over_voltage=3" >> $CONFIG
+	echo "over_voltage=5" >> $CONFIG
 	echo "sdram_over_voltage not defined. Creating definition"
 	echo "sdram_over_voltage=2" >> $CONFIG
 fi
@@ -97,6 +97,7 @@ else
 	if echo "$answer" | grep -iq "^y" ;
 	then
 		echo "force_turbo=1" >> $CONFIG
+		echo "boot_delay=1" >> $CONFIG
 	else
 		echo "CPU Turbo NOT enabled at this time"
 	fi
